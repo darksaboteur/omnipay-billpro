@@ -1,0 +1,29 @@
+{
+    "name": "aimalazmi/omnipay-billpro",
+    "type": "library",
+    "description": "BillPro Netherlands driver for the Omnipay payment processing library",
+    "keywords": [
+        "gateway",
+        "merchant",
+        "omnipay",
+        "pay",
+        "billpro",
+        "payment"
+    ],
+    "homepage": "https://github.com/AimalAzmi/omnipay-billpro",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aimal Azmi"
+        }
+    ],
+    "autoload": {
+        "psr-0": { "Omnipay\\BillPro\\" : "src/" }
+    },
+    "require": {
+        "omnipay/common": "~2.3"
+    },
+    "require-dev": {
+        "omnipay/tests": "~2.0"
+    }
+}

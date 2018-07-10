@@ -2,7 +2,7 @@
 namespace Omnipay\BillPro\Message;
 use Omnipay\Common\CreditCard;
 use Omnipay\Common\Message\AbstractRequest;
-
+use Illuminate\Http\Request;
 use DOMDocument;
 
 /**
@@ -135,44 +135,26 @@ class PurchaseRequest extends AbstractRequest {
         $merchant = $data->addChild('AccountID', $this->getMerchant());
         $password = $data->addChild('AccountAuth', $this->getPassword());
         $transaction = $data->addChild('Transaction');
-        // $transaction->addChild('order_id', $this->getTransactionId());
 
-        $transaction->addChild('Reference', 'Test Transaction BillPro');
+        $transaction->addChild('Reference', $this->getDescription());
         $transaction->addChild('Currency', $this->getCurrency());
         $transaction->addChild('FirstName', $this->getCard()->getFirstName());
         $transaction->addChild('LastName', $this->getCard()->getLastName());
-
-        $amount = $this->getAmount();
-
-        $explodeAmount = explode('.', $amount);
-
-        // Make amount an even number everytime - API Requirement
-        if (isset($explodeAmount[1]))
-        {
-            if ($explodeAmount[1] % 2 != 0)
-            {
-                // $amount = $explodeAmount[0] . '.' . substr($explodeAmount[1], 0, 1);
-                $amount = $explodeAmount[0] . '.' . ($explodeAmount[1] + 1);
-            }
-        }
-
-        $transaction->addChild('Amount', $amount);
+        $transaction->addChild('Amount', $this->getAmount());
         $transaction->addChild('City', $this->getCard()->getBillingCity());
         $transaction->addChild('State', $this->getCard()->getBillingState());
         $transaction->addChild('PostCode', $this->getCard()->getBillingPostcode());
         $transaction->addChild('Country', $this->getCard()->getBillingCountry());
-        $transaction->addChild('IPAddress', '192.168.1.1');
-        $transaction->addChild('Phone', '+31 6 53828605');
+        $transaction->addChild('IPAddress', \Request::ip());
+        $transaction->addChild('Phone', $this->getCard()->getPhone());
         $transaction->addChild('Address', $this->getCard()->getBillingAddress1());
-        $transaction->addChild('Email', 'test@gmail.com');
+        $transaction->addChild('Email', $this->getCard()->getEmail());
 
         // Card Data
         $transaction->addChild('CardNumber', $this->getCard()->getNumber());
         $transaction->addChild('CardExpMonth', $this->getCard()->getExpiryMonth());
         $transaction->addChild('CardExpYear', $this->getCard()->getExpiryYear());
         $transaction->addChild('CardCVV', $this->getCard()->getCvv());
-
-        // print_r($data); die;
 
         return $data;
     }

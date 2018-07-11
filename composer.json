@@ -1,5 +1,5 @@
 {
-    "name": "aimalazmi/omnipay-billpro",
+    "name": "darksaboteur/omnipay-billpro",
     "type": "library",
     "description": "BillPro Netherlands driver for the Omnipay payment processing library",
     "keywords": [

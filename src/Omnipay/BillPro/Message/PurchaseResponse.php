@@ -17,8 +17,7 @@ class PurchaseResponse extends AbstractResponse {
      *
      * @access public
      */
-    public function __construct(RequestInterface $request, $data) 
-    {
+    public function __construct(RequestInterface $request, $data) {
         $this->request = $request;
         $this->data = $data;
 
@@ -31,8 +30,7 @@ class PurchaseResponse extends AbstractResponse {
      * @access public
      * @return string
      */
-    public function getMessage() 
-    {
+    public function getMessage() {
         $message = 'UNKNOWN ERROR';
         if (isset($this->data->Description)) {
             $message = $this->data->Description->__toString();
@@ -46,10 +44,8 @@ class PurchaseResponse extends AbstractResponse {
      * @access public
      * @return string
      */
-    public function getTransactionReference() 
-    {
-        if (isset($this->data->Reference)) 
-        {
+    public function getTransactionReference() {
+        if (isset($this->data->Reference)) {
             return $this->data->Reference;
         }
     }
@@ -60,8 +56,7 @@ class PurchaseResponse extends AbstractResponse {
      * @access public
      * @return boolean
      */
-    public function isRedirect() 
-    {
+    public function isRedirect() {
         return false;
     }
 
@@ -71,20 +66,11 @@ class PurchaseResponse extends AbstractResponse {
      * @access public
      * @return boolean
      */
-    public function isSuccessful() 
-    {
-        if (isset($this->data->ResponseCode))
-        {
+    public function isSuccessful() {
+        if (isset($this->data->ResponseCode)) {
             $responseCode = $this->data->ResponseCode;
-
-            if ($responseCode == '100')
-            {
-                return true;
-            }
-
-            return false;
+            return ($responseCode == '100');
         }
-        
         return false;
     }
 }

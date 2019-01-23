@@ -10,20 +10,23 @@
         "billpro",
         "payment"
     ],
-    "homepage": "https://github.com/AimalAzmi/omnipay-billpro",
+    "homepage": "https://github.com/darksaboteur/omnipay-billpro",
     "license": "MIT",
     "authors": [
         {
             "name": "Aimal Azmi"
+        },
+        {
+            "name": "Nicholas Brackley"
         }
     ],
     "autoload": {
         "psr-0": { "Omnipay\\BillPro\\" : "src/" }
     },
     "require": {
-        "omnipay/common": "~2.3"
+        "omnipay/common": "^3"
     },
     "require-dev": {
-        "omnipay/tests": "~2.0"
+        "omnipay/tests": "^3"
     }
 }

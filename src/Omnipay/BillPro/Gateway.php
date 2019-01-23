@@ -14,8 +14,7 @@ class Gateway extends AbstractGateway {
      * @access public
      * @return string
      */
-    public function getName() 
-    {
+    public function getName() {
         return 'BillPro';
     }
 
@@ -25,8 +24,7 @@ class Gateway extends AbstractGateway {
      * @access public
      * @return array
      */
-    public function getDefaultParameters() 
-    {
+    public function getDefaultParameters() {
         return [
             'merchant'     => '',
             'password'     => '',
@@ -41,8 +39,7 @@ class Gateway extends AbstractGateway {
      * @access public
      * @return string
      */
-    public function getMerchant() 
-    {
+    public function getMerchant() {
         return $this->getParameter('merchant');
     }
 
@@ -54,8 +51,7 @@ class Gateway extends AbstractGateway {
      * @access public
      * @return void
      */
-    public function setMerchant($value) 
-    {
+    public function setMerchant($value) {
         return $this->setParameter('merchant', $value);
     }
 
@@ -65,8 +61,7 @@ class Gateway extends AbstractGateway {
      * @access public
      * @return string
      */
-    public function getPassword() 
-    {
+    public function getPassword() {
         return $this->getParameter('password');
     }
 
@@ -78,8 +73,7 @@ class Gateway extends AbstractGateway {
      * @access public
      * @return void
      */
-    public function setPassword($value) 
-    {
+    public function setPassword($value) {
         return $this->setParameter('password', $value);
     }
 
@@ -89,8 +83,7 @@ class Gateway extends AbstractGateway {
      * @access public
      * @return string
      */
-    public function getUserAgentHeader() 
-    {
+    public function getUserAgentHeader() {
         return $this->getParameter('userAgentHeader');
     }
 
@@ -102,8 +95,7 @@ class Gateway extends AbstractGateway {
      * @access public
      * @return void
      */
-    public function setUserAgentHeader($value) 
-    {
+    public function setUserAgentHeader($value) {
         return $this->setParameter('userAgentHeader', $value);
     }
 
@@ -115,8 +107,7 @@ class Gateway extends AbstractGateway {
      * @access public
      * @return \Omnipay\BillPro\Message\PurchaseRequest
      */
-    public function purchase(array $parameters = []) 
-    {
+    public function purchase(array $parameters = []) {
         return $this->createRequest('\Omnipay\BillPro\Message\PurchaseRequest', $parameters);
     }
 }

@@ -4,6 +4,8 @@ use Omnipay\Common\CreditCard;
 use Omnipay\Common\Message\AbstractRequest;
 use Illuminate\Http\Request;
 use DOMDocument;
+use SimpleXMLElement;
+use DOMImplementation;
 
 /**
  * Omnipay BillPro XML Purchase Request
@@ -15,8 +17,7 @@ class PurchaseRequest extends AbstractRequest {
     const EP_HOST_TEST = 'https://gateway.billpro.com';
     const EP_PATH = '';
 
-    public function initialize(array $parameters = []) 
-    {
+    public function initialize(array $parameters = []) {
         $init = parent::initialize($parameters);
 
         if (isset($parameters['customerId'])) {
@@ -32,8 +33,7 @@ class PurchaseRequest extends AbstractRequest {
      * @access public
      * @return string
      */
-    public function getAcceptHeader() 
-    {
+    public function getAcceptHeader() {
         return $this->getParameter('acceptHeader');
     }
 
@@ -45,8 +45,7 @@ class PurchaseRequest extends AbstractRequest {
      * @access public
      * @return void
      */
-    public function setAcceptHeader($value) 
-    {
+    public function setAcceptHeader($value) {
         return $this->setParameter('acceptHeader', $value);
     }
 
@@ -56,8 +55,7 @@ class PurchaseRequest extends AbstractRequest {
      * @access public
      * @return string
      */
-    public function getMerchant() 
-    {
+    public function getMerchant() {
         return $this->getParameter('merchant');
     }
 
@@ -79,8 +77,7 @@ class PurchaseRequest extends AbstractRequest {
      * @access public
      * @return string
      */
-    public function getPassword() 
-    {
+    public function getPassword() {
         return $this->getParameter('password');
     }
 
@@ -92,8 +89,7 @@ class PurchaseRequest extends AbstractRequest {
      * @access public
      * @return void
      */
-    public function setPassword($value) 
-    {
+    public function setPassword($value) {
         return $this->setParameter('password', $value);
     }
 
@@ -103,8 +99,7 @@ class PurchaseRequest extends AbstractRequest {
      * @access public
      * @return string
      */
-    public function getUserAgentHeader() 
-    {
+    public function getUserAgentHeader() {
         return $this->getParameter('userAgentHeader');
     }
 
@@ -116,8 +111,7 @@ class PurchaseRequest extends AbstractRequest {
      * @access public
      * @return void
      */
-    public function setUserAgentHeader($value) 
-    {
+    public function setUserAgentHeader($value) {
         return $this->setParameter('userAgentHeader', $value);
     }
 
@@ -127,11 +121,10 @@ class PurchaseRequest extends AbstractRequest {
      * @access public
      * @return \SimpleXMLElement
      */
-    public function getData() 
-    {
+    public function getData() {
         $this->validate('amount', 'card');
         $this->getCard()->validate();
-        $data = new \SimpleXMLElement('<Request type="AuthorizeCapture" />');
+        $data = new SimpleXMLElement('<Request type="AuthorizeCapture" />');
         $merchant = $data->addChild('AccountID', $this->getMerchant());
         $password = $data->addChild('AccountAuth', $this->getPassword());
         $transaction = $data->addChild('Transaction');
@@ -162,14 +155,13 @@ class PurchaseRequest extends AbstractRequest {
     /**
      * Send data
      *
-     * @param \SimpleXMLElement $data Data
+     * @param SimpleXMLElement $data Data
      *
      * @access public
      * @return RedirectResponse
      */
-    public function sendData($data) 
-    {
-        $implementation = new \DOMImplementation();
+    public function sendData($data) {
+        $implementation = new DOMImplementation();
         $document = $implementation->createDocument(null, '');
         $document->encoding = 'utf-8';
         $node = $document->importNode(dom_import_simplexml($data), true);
@@ -179,13 +171,12 @@ class PurchaseRequest extends AbstractRequest {
             'Content-Type'  => 'text/xml; charset=utf-8'
         ];
         $xml = $document->saveXML();
-        
+
         $httpResponse = $this->httpClient
-            ->post($this->getEndpoint(), $headers, $xml)
-            ->send();
+            ->request('POST', $this->getEndpoint(), $headers, $xml);
 
         // print_r($httpResponse->getMessage()); print_r($httpResponse->xml()); die;
-        return $this->response = new PurchaseResponse($this, $httpResponse->xml());
+        return $this->response = new PurchaseResponse($this, simplexml_load_string($httpResponse->getBody()->getContents()));
     }
 
     /**
@@ -196,8 +187,7 @@ class PurchaseRequest extends AbstractRequest {
      * @access protected
      * @return string
      */
-    protected function getEndpoint() 
-    {
+    protected function getEndpoint() {
         return ($this->getTestMode() ? self::EP_HOST_TEST : self::EP_HOST_LIVE) . self::EP_PATH;
     }
 }
